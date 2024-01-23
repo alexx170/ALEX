@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload and Download</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #changeColorButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #fileInput {
+            margin-top: 20px;
+        }
+
+        #fileList {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to My Website!</h1>
+    
+    <button id="changeColorButton">Change Background Color</button>
+
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload File</button>
+
+    <div id="fileList">
+        <h2>Uploaded Files</h2>
+        <!-- File list will be displayed here -->
+    </div>
+
+    <script>
+        document.getElementById('changeColorButton').addEventListener('click', function() {
+            changeBackgroundColor();
+        });
+
+        function changeBackgroundColor() {
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            document.body.style.backgroundColor = randomColor;
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+
+            const files = fileInput.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Read the file content using FileReader
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    // Display the file name
+                    const fileNameElement = document.createElement('p');
+                    fileNameElement.textContent = `File Name: ${file.name}`;
+                    fileList.appendChild(fileNameElement);
+
+                    // Create a download link for the file
+                    const downloadLink = document.createElement('a');
+                    downloadLink.textContent = 'Download';
+                    downloadLink.href = event.target.result;
+                    downloadLink.download = file.name;
+                    fileList.appendChild(downloadLink);
+
+                    // Add a line break for better readability
+                    fileList.appendChild(document.createElement('br'));
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            // Clear the file input for the next upload
+            fileInput.value = null;
+        }
+    </script>
+
+</body>
+</html>
