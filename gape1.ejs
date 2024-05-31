@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2 - Save Records</title>
+</head>
+<body>
+    <h1>Page 2 - Save Records</h1>
+    <form id="recordForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" name="phone" required>
+        <br>
+        <label for="reportingTime">Reporting Time:</label>
+        <input type="time" id="reportingTime" name="reportingTime" required>
+        <br>
+        <label for="setTime">Set Time:</label>
+        <input type="time" id="setTime" name="setTime" required>
+        <br>
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" required>
+        <br>
+        <label for="activity">Activity:</label>
+        <input type="text" id="activity" name="activity" required>
+        <br>
+        <button type="submit">Save Record</button>
+    </form>
+
+    <script>
+        document.getElementById('recordForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const reportingTime = document.getElementById('reportingTime').value;
+            const setTime = document.getElementById('setTime').value;
+            const department = document.getElementById('department').value;
+            const activity = document.getElementById('activity').value;
+
+            const record = {
+                name,
+                phone,
+                reportingTime,
+                setTime,
+                department,
+                activity
+            };
+
+            // Retrieve existing records from localStorage
+            const records = JSON.parse(localStorage.getItem('records')) || [];
+
+            // Add new record to the array
+            records.push(record);
+
+            // Save updated records array to localStorage
+            localStorage.setItem('records', JSON.stringify(records));
+
+            alert('Record saved successfully!');
+            document.getElementById('recordForm').reset();
+        });
+    </script>
+</body>
+</html>

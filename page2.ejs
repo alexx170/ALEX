@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department and Activity Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e0f7fa;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        select, button {
+            display: block;
+            width: 80%;
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Department and Activity</h1>
+        <select id="departmentSelect">
+            <option value="" disabled selected>Select Department</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Marketing">Marketing</option>
+            <option value="IT">IT</option>
+            <option value="Sales">Sales</option>
+        </select>
+        <select id="activitySelect">
+            <option value="" disabled selected>Select Activity</option>
+            <option value="Meeting">Meeting</option>
+            <option value="Training">Training</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Consultation">Consultation</option>
+            <option value="Review">Review</option>
+        </select>
+        <button onclick="saveAndNext()">Next</button>
+    </div>
+    <script>
+        function saveAndNext() {
+            const department = document.getElementById('departmentSelect').value;
+            const activity = document.getElementById('activitySelect').value;
+
+            // Save the department and activity to localStorage
+            localStorage.setItem('selectedDepartment', department);
+            localStorage.setItem('selectedActivity', activity);
+
+            window.location.href = '/page3'; // Update the URL to the correct path of Page 3
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details and Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3f3f3;
+        }
+
+        .details-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .details-container h1 {
+            margin-bottom: 20px;
+        }
+
+        .details-container input[type="text"],
+        .details-container input[type="tel"],
+        .details-container select,
+        .details-container button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .details-container button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .details-container button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    
+    </style>
+</head>
+<body>
+    <div class="details-container">
+        <h1>Enter Your Details</h1>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+        <select id="hours">
+            <!-- Adding options for hours -->
+            <% for (let i = 0; i < 13; i++) { %>
+                <option value="<%= i.toString().padStart(2, '0') %>"><%= i.toString().padStart(2, '0') %></option>
+            <% } %>
+        </select>
+        <select id="minutes">
+            <!-- Adding options for minutes -->
+            <% for (let i = 0; i < 60; i++) { %>
+                <option value="<%= i.toString().padStart(2, '0') %>"><%= i.toString().padStart(2, '0') %></option>
+            <% } %>
+        </select>
+        <select id="seconds">
+            <!-- Adding options for seconds -->
+            <% for (let i = 0; i < 60; i++) { %>
+                <option value="<%= i.toString().padStart(2, '0') %>"><%= i.toString().padStart(2, '0') %></option>
+            <% } %>
+        </select>
+        <button onclick="addUser()">Add Person</button>
+        <button onclick="setTimerIfMatchingTime()">Set Timer</button>
+        <button onclick="navigateToPageFour()">Next Page</button> <!-- Added button to navigate to page four -->
+    </div>
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Set Time</th>
+                <th>Reporting Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- User records will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+function checkMatchingTime() {
+    const currentTime = new Date().toLocaleTimeString();
+    const tableRows = document.querySelectorAll('#userTable tbody tr');
+
+    tableRows.forEach(row => {
+        const reportingTime = row.cells[3].textContent;
+        const name = row.cells[0].textContent;
+        const phone = row.cells[1].textContent;
+        const setTime = row.cells[2].textContent;
+       
+        if (currentTime === reportingTime) {
+            row.cells[4].textContent = 'Attended';
+            alert(`${name} has attended.`);
+
+            localStorage.setItem('name', name);
+            localStorage.setItem('phone', phone);
+            localStorage.setItem('reportingTime', reportingTime);
+            localStorage.setItem('setTime', setTime);
+            // Redirect to page 4 after setting localStorage
+           
+            window.location.href = '/page4';
+        }
+    });
+}
+
+
+let timer;
+
+        function addUser() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const hours = document.getElementById('hours').value;
+            const minutes = document.getElementById('minutes').value;
+            const seconds = document.getElementById('seconds').value;
+            const department = localStorage.getItem('selectedDepartment');
+            const activity = localStorage.getItem('selectedActivity');
+
+            // Validate input
+            if (hours === '' || minutes === '' || seconds === '') {
+                alert('Please select hours, minutes, and seconds.');
+                return;
+            }
+
+            const setTime = `${hours}:${minutes}:${seconds}`;
+            const reportingTime = new Date().toLocaleTimeString(); // Corrected set time
+
+            // Create new user object
+            const user = { name, phone, reportingTime, setTime ,department, activity };
+
+            // Append user to the table
+            const tableBody = document.querySelector('#userTable tbody');
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+                <td>${user.name}</td>
+                <td>${user.phone}</td>
+                <td>${user.setTime}</td>
+                <td>${user.reportingTime}</td>
+                <td>Not Attended</td>
+                <td><button onclick="deleteUser(this)">Delete</button></td>
+            `;
+
+            // Validate input
+            if (!name || !phone || hours === '' || minutes === '' || seconds === '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Create new user object
+        
+            // Save user details in localStorage
+            let records = JSON.parse(localStorage.getItem('records')) || [];
+            records.push(user);
+            localStorage.setItem('records', JSON.stringify(records));
+
+        
+
+            // Clear input fields
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('hours').selectedIndex = 0;
+            document.getElementById('minutes').selectedIndex = 0;
+            document.getElementById('seconds').selectedIndex = 0;
+        }
+
+        function deleteUser(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        function setTimerIfMatchingTime() {
+            // Clear existing timer
+            clearInterval(timer);
+
+            // Start a new timer
+            timer = setInterval(checkMatchingTime, 1000);
+        }
+
+        function checkMatchingTime() {
+            const currentTime = new Date().toLocaleTimeString();
+
+            const tableRows = document.querySelectorAll('#userTable tbody tr');
+            tableRows.forEach(row => {
+                const setTime = row.cells[2].textContent;
+                const name = row.cells[0].textContent;
+
+                if (currentTime === setTime) {
+                    row.cells[4].textContent = 'Attended';
+                    alert(`${name} has attended.`);
+                }
+            });
+        }
+
+        
+
+
+        function navigateToPageFour() {
+            window.location.href = '/page4'; // Navigate to page four
+        }
+    </script>
+</body>
+</html>

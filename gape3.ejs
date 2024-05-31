@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 4 - Specific Records</title>
+</head>
+<body>
+    <h1>Page 4 - Specific Records</h1>
+    <label for="departmentFilter">Filter by Department:</label>
+    <input type="text" id="departmentFilter" name="departmentFilter">
+    <button onclick="filterRecords()">Filter</button>
+
+    <table id="recordsTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Reporting Time</th>
+                <th>Set Time</th>
+                <th>Department</th>
+                <th>Activity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Records will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        function filterRecords() {
+            const departmentFilter = document.getElementById('departmentFilter').value;
+            const records = JSON.parse(localStorage.getItem('records')) || [];
+
+            const filteredRecords = records.filter(record => record.department === departmentFilter);
+
+            const tableBody = document.querySelector('#recordsTable tbody');
+            tableBody.innerHTML = '';
+
+            filteredRecords.forEach(record => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${record.name}</td>
+                    <td>${record.phone}</td>
+                    <td>${record.reportingTime}</td>
+                    <td>${record.setTime}</td>
+                    <td>${record.department}</td>
+                    <td>${record.activity}</td>
+                `;
+            });
+
+            if (filteredRecords.length === 0) {
+                const row = tableBody.insertRow();
+                row.innerHTML = `<td colspan="6">No records found for the specified department.</td>`;
+            }
+        }
+    </script>
+</body>
+</html>

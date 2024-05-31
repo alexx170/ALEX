@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-background {
+    background-color: #f2f2f2;
+}
+
+.select-background {
+    background-color: #e0f7fa;
+}
+
+.details-background {
+    background-color: #f3e5f5;
+}
+
+.thankyou-background {
+    background-color: #ffecb3;
+}
+
+.summary-background {
+    background-color: #c8e6c9;
+}
+
+.container, .login-container, .select-container, .details-container, .thankyou-container, .summary-container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="password"], input[type="tel"], input[type="time"], select, button {
+    display: block;
+    width: 80%;
+    padding: 10px;
+    margin: 10px auto;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+
+
+</style>
+
+
+</head>
+<body class="login-background">
+    <div class="login-container">
+        <h1>Login</h1>
+        <form onsubmit="return login()">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (username === 'user' && password === 'password') {
+                window.location.href = '/page2';
+            } else {
+                alert('Incorrect username or password');
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>
